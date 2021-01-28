@@ -1,4 +1,5 @@
 package pp.javastart.budget;
+
 import java.util.Scanner;
 
 public class BudgetApp {

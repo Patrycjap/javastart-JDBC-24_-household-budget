@@ -26,15 +26,10 @@ public class BudgetSave {
         scanner.nextLine();
 
         System.out.println("Podaj date w formacie yyyy-mm-dd");
-        DateTimeFormatter dateFormater = DateTimeFormatter.ofPattern("yyyy" + "-" + "MM" + "-" + "dd");
+        DateTimeFormatter dateFormater = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String date;
         date = scanner.nextLine();
         LocalDate formatedDate = LocalDate.parse(date, dateFormater);
-
-        while (!(date.equals(dateFormater.format(formatedDate)))) {
-            System.out.println("Zły format daty: powinno byc yyyy-mm-dd");
-            date = scanner.nextLine();
-        }
 
         Transaction transaction = new Transaction(type, description, amount, formatedDate);
         TransactionDao transactionDao = new TransactionDao();
