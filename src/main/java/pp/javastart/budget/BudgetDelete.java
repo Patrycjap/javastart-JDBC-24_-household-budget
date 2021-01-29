@@ -11,6 +11,5 @@ public class BudgetDelete {
         TransactionDao transactionDao = new TransactionDao();
         transactionDao.deleteById(id);
         System.out.println("Usunięto transakcje o nr id: " + id);
-        scanner.close();
     }
 }

@@ -16,7 +16,7 @@ public class BudgetSave {
         TransactionType type;
         type = TransactionType.getByName(scanner.nextLine());
         while (!TransactionType.SPEND.equals(type) && !TransactionType.INCOME.equals(type)) {
-            System.out.println("Zła nazwa wydatku: poprawne wartości to 'WYDATEK' lub 'PRZYCHÓD'");
+            System.out.println("Zła nazwa wydatku: poprawne wartości to 'wydatek' lub 'przychód'");
             type = TransactionType.getByName(scanner.nextLine());
         }
 
@@ -36,7 +36,7 @@ public class BudgetSave {
                 String date = scanner.nextLine();
                 formatedDate = LocalDate.parse(date, dateFormater);
             } catch (DateTimeParseException e) {
-                System.out.println("Data nie prawidłowa");
+                System.out.println("Data nieprawidłowa");
             }
         }
 

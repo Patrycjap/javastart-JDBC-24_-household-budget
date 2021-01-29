@@ -11,14 +11,14 @@ public class BudgetSearchType {
 
         System.out.println("Podaj typ transakcji, którą chcesz wyświetlić: wydatek lub przychód");
 
-        String type;
-        type = scanner.nextLine();
-        while (!(type.equals("wydatek") || type.equals("przychód"))) {
-            System.out.println("Zły typ: Poprawne wartości to wydatek lub przychód");
-            type = scanner.nextLine();
+        TransactionType type;
+        type = TransactionType.getByName(scanner.nextLine());
+        while (!TransactionType.SPEND.equals(type) && !TransactionType.INCOME.equals(type)) {
+            System.out.println("Zła nazwa wydatku: poprawne wartości to 'wydatek' lub 'przychód'");
+            type = TransactionType.getByName(scanner.nextLine());
         }
         TransactionDao transactionDao = new TransactionDao();
-        List<Transaction> transaction = transactionDao.searchByType(type);
+        List<Transaction> transaction = transactionDao.searchByType(String.valueOf(type));
         System.out.println("Poniżej znajdują się transakcje dla typu: " + type);
         System.out.println(transaction);
     }
