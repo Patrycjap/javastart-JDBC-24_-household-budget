@@ -1,5 +1,6 @@
 package pp.javastart.budget;
 
+import java.math.BigDecimal;
 import java.sql.*;
 
 import java.util.ArrayList;
@@ -7,23 +8,39 @@ import java.util.List;
 
 public class TransactionDao {
 
+    public static final String INSERT_SQL = "INSERT INTO transactions(type, description, amount, date) VALUES (?, ?, ?, ?)";
+    public static final String UPDATE_SQL = "UPDATE transactions SET type = ?, description = ?, amount =? , date = ? WHERE id=?";
+    public static final String SELECT_BY_TYPE_SQL = "SELECT * FROM transactions WHERE type like ?";
+    public static final String DELETE_BY_ID_SQL = "DELETE FROM transactions WHERE id = ?";
+    public static final String URL_DB = "jdbc:mysql://localhost:3306/budget?serverTimezone=UTC&characterEncoding=utf8";
+
     public void insert(Transaction transaction) {
 
         Connection connection = connect();
 
         PreparedStatement preparedStatement = null;
         try {
-            String sql = "INSERT INTO transactions(type, description, amount, date) VALUES (?, ?, ?, ?)";
+            String sql = INSERT_SQL;
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, transaction.getType());
             preparedStatement.setString(2, transaction.getDescription());
-            preparedStatement.setDouble(3, transaction.getAmount());
+            preparedStatement.setBigDecimal(3, transaction.getAmount());
             preparedStatement.setDate(4, Date.valueOf(transaction.getDate()));
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Niepowodzenie podczas zapisu do bazy: " + e.getMessage());
         }
+        closeStatement(preparedStatement);
         closeConnection(connection);
+
+    }
+
+    private void closeStatement(PreparedStatement preparedStatement) {
+        try {
+            preparedStatement.close();
+        } catch (SQLException e) {
+            System.out.println("Niepowodzenia podczas zamkniecia prepareStatement" + e.getMessage());
+        }
     }
 
     private void closeConnection(Connection connection) {
@@ -40,7 +57,7 @@ public class TransactionDao {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        String url = "jdbc:mysql://localhost:3306/budget?serverTimezone=UTC&characterEncoding=utf8";
+        String url = URL_DB;
         try {
             return DriverManager.getConnection(url, "root", "root");
         } catch (SQLException e) {
@@ -54,17 +71,18 @@ public class TransactionDao {
 
         PreparedStatement preparedStatement = null;
         try {
-            String sql = "UPDATE transactions SET type = ?, description = ?, amount =? , date = ? WHERE id=?";
+            String sql = UPDATE_SQL;
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, transaction.getType());
             preparedStatement.setString(2, transaction.getDescription());
-            preparedStatement.setDouble(3, transaction.getAmount());
+            preparedStatement.setBigDecimal(3, transaction.getAmount());
             preparedStatement.setDate(4, Date.valueOf(transaction.getDate()));
             preparedStatement.setLong(5, transaction.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Niepowodzenie podczas modyfikacji: " + e.getMessage());
         }
+        closeStatement(preparedStatement);
         closeConnection(connection);
     }
 
@@ -73,13 +91,14 @@ public class TransactionDao {
 
         PreparedStatement preparedStatement = null;
         try {
-            String sql = "DELETE FROM transactions WHERE id = ?";
+            String sql = DELETE_BY_ID_SQL;
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Niepowodzenie podczas usówania rekordu bazy: " + e.getMessage());
         }
+        closeStatement(preparedStatement);
         closeConnection(connection);
     }
 
@@ -89,7 +108,7 @@ public class TransactionDao {
         Transaction transaction = null;
         PreparedStatement preparedStatement = null;
         try {
-            String sql = "SELECT * FROM transactions WHERE type like ?";
+            String sql = SELECT_BY_TYPE_SQL;
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, type);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -97,7 +116,7 @@ public class TransactionDao {
                 long id = resultSet.getLong("id");
                 String typeFromDb = resultSet.getString("type");
                 String description = resultSet.getString("description");
-                int amount = resultSet.getInt("amount");
+                BigDecimal amount = resultSet.getBigDecimal("amount");
                 Date date = resultSet.getDate("date");
 
                 transaction = new Transaction(id, typeFromDb, description, amount, date.toLocalDate());
@@ -107,7 +126,10 @@ public class TransactionDao {
         } catch (SQLException e) {
             System.out.println("Niepowodzenie podczas wczytywania danych z bazy: " + e.getMessage());
         }
+        if (preparedStatement != null) {
+            closeStatement(preparedStatement);
+        }
         closeConnection(connection);
-        return null;
+        return list;
     }
 }

@@ -1,5 +1,6 @@
 package pp.javastart.budget;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class Transaction {
@@ -7,10 +8,10 @@ public class Transaction {
     private Long id;
     private String type;
     private String description;
-    private double amount;
+    private BigDecimal amount;
     private LocalDate date;
 
-    public Transaction(Long id, String type, String description, double amount, LocalDate date) {
+    public Transaction(Long id, String type, String description, BigDecimal amount, LocalDate date) {
         this.id = id;
         this.type = type;
         this.description = description;
@@ -18,7 +19,7 @@ public class Transaction {
         this.date = date;
     }
 
-    public Transaction(String type, String description, double amount, LocalDate date) {
+    public Transaction(String type, String description, BigDecimal amount, LocalDate date) {
         this(null, type, description, amount, date);
     }
 
@@ -46,11 +47,11 @@ public class Transaction {
         this.description = description;
     }
 
-    public double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 

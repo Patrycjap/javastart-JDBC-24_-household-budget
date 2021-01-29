@@ -1,5 +1,6 @@
 package pp.javastart.budget;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
@@ -22,7 +23,7 @@ public class BudgetSave {
         String description = scanner.nextLine();
 
         System.out.println("Podaj kwote transakcji");
-        int amount = scanner.nextInt();
+        BigDecimal amount = scanner.nextBigDecimal();
         scanner.nextLine();
 
         System.out.println("Podaj date w formacie yyyy-mm-dd");

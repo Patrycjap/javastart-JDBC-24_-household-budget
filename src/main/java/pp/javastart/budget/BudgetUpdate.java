@@ -1,6 +1,8 @@
 package pp.javastart.budget;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class BudgetUpdate {
@@ -23,16 +25,20 @@ public class BudgetUpdate {
         String description = scanner.nextLine();
 
         System.out.println("Podaj kwote transakcji");
-        int amount = scanner.nextInt();
+        BigDecimal amount = scanner.nextBigDecimal();
         scanner.nextLine();
 
         System.out.println("Podaj date w formacie yyyy-mm-dd");
-        LocalDate date = LocalDate.parse(scanner.nextLine());
+        DateTimeFormatter dateFormater = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String date;
+        date = scanner.nextLine();
 
-        Transaction transaction = new Transaction(id, type, description, amount, date);
 
+        LocalDate formatedDate = LocalDate.parse(date, dateFormater);
+        Transaction transaction = new Transaction(id, type, description, amount, formatedDate);
         TransactionDao transactionDao = new TransactionDao();
         transactionDao.update(transaction);
         scanner.close();
+
     }
 }

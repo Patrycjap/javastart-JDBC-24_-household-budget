@@ -37,6 +37,7 @@ public class BudgetApp {
                 default:
                     System.out.println("Błędny wybór!");
             }
+            scanner.close();
         }
     }
 }
