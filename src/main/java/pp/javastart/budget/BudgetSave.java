@@ -3,6 +3,7 @@ package pp.javastart.budget;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class BudgetSave {
@@ -12,11 +13,11 @@ public class BudgetSave {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Podaj typ: wydatek/przychód");
-        String type;
-        type = scanner.nextLine();
-        while (!(type.equals("wydatek") || type.equals("przychód"))) {
-            System.out.println("Zła nazwa wydatku: poprawne wartości to 'wydatek' lub 'przychód'");
-            type = scanner.nextLine();
+        TransactionType type;
+        type = TransactionType.getByName(scanner.nextLine());
+        while (!TransactionType.SPEND.equals(type) && !TransactionType.INCOME.equals(type)) {
+            System.out.println("Zła nazwa wydatku: poprawne wartości to 'WYDATEK' lub 'PRZYCHÓD'");
+            type = TransactionType.getByName(scanner.nextLine());
         }
 
         System.out.println("Podaj opis");
@@ -26,15 +27,21 @@ public class BudgetSave {
         BigDecimal amount = scanner.nextBigDecimal();
         scanner.nextLine();
 
-        System.out.println("Podaj date w formacie yyyy-mm-dd");
         DateTimeFormatter dateFormater = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String date;
-        date = scanner.nextLine();
-        LocalDate formatedDate = LocalDate.parse(date, dateFormater);
+
+        LocalDate formatedDate = null;
+        while (formatedDate == null) {
+            System.out.println("Podaj date w formacie yyyy-mm-dd");
+            try {
+                String date = scanner.nextLine();
+                formatedDate = LocalDate.parse(date, dateFormater);
+            } catch (DateTimeParseException e) {
+                System.out.println("Data nie prawidłowa");
+            }
+        }
 
         Transaction transaction = new Transaction(type, description, amount, formatedDate);
         TransactionDao transactionDao = new TransactionDao();
         transactionDao.insert(transaction);
-        scanner.close();
     }
 }

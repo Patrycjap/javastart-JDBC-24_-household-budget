@@ -14,12 +14,12 @@ public class BudgetUpdate {
         long id = scanner.nextLong();
         scanner.nextLine();
 
-        System.out.println("Podaj typ: wydatek/przychód");
-        String type;
-        type = scanner.nextLine();
-        while (!(type.equals("wydatek") || type.equals("przychód"))) {
-            System.out.println("Zły typ: Poprawne wartości to wydatek lub przychód");
-            type = scanner.nextLine();
+        System.out.println("Podaj typ: 'WYDATEK' lub 'PRZYCHÓD'");
+        TransactionType type;
+        type = TransactionType.valueOf(scanner.nextLine());
+        while (!(type.equals(TransactionType.SPEND)) && !(type.equals(TransactionType.INCOME))) {
+            System.out.println("Zły typ: Poprawne wartości to 'WYDATEK' lub 'PRZYCHÓD'");
+            type = TransactionType.valueOf(scanner.nextLine());
         }
         System.out.println("Podaj opis");
         String description = scanner.nextLine();
@@ -33,12 +33,9 @@ public class BudgetUpdate {
         String date;
         date = scanner.nextLine();
 
-
         LocalDate formatedDate = LocalDate.parse(date, dateFormater);
         Transaction transaction = new Transaction(id, type, description, amount, formatedDate);
         TransactionDao transactionDao = new TransactionDao();
         transactionDao.update(transaction);
-        scanner.close();
-
     }
 }

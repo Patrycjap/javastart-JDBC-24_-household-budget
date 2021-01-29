@@ -22,7 +22,7 @@ public class TransactionDao {
         try {
             String sql = INSERT_SQL;
             preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, transaction.getType());
+            preparedStatement.setString(1, String.valueOf(transaction.getType()));
             preparedStatement.setString(2, transaction.getDescription());
             preparedStatement.setBigDecimal(3, transaction.getAmount());
             preparedStatement.setDate(4, Date.valueOf(transaction.getDate()));
@@ -73,7 +73,7 @@ public class TransactionDao {
         try {
             String sql = UPDATE_SQL;
             preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, transaction.getType());
+            preparedStatement.setString(1, String.valueOf(transaction.getType()));
             preparedStatement.setString(2, transaction.getDescription());
             preparedStatement.setBigDecimal(3, transaction.getAmount());
             preparedStatement.setDate(4, Date.valueOf(transaction.getDate()));
@@ -114,7 +114,7 @@ public class TransactionDao {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 long id = resultSet.getLong("id");
-                String typeFromDb = resultSet.getString("type");
+                TransactionType typeFromDb = TransactionType.valueOf(resultSet.getString("type"));
                 String description = resultSet.getString("description");
                 BigDecimal amount = resultSet.getBigDecimal("amount");
                 Date date = resultSet.getDate("date");

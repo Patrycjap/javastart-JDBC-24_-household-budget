@@ -7,8 +7,9 @@ public class BudgetApp {
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
+        String userInput = null;
 
-        while (true) {
+        while (!("0".equals(userInput))) {
 
             System.out.println("Aplikacja do zarządzania budżetem. Wybierz opcje: ");
             System.out.println("1. Dodawanie");
@@ -17,7 +18,7 @@ public class BudgetApp {
             System.out.println("4. Wyszukanie typu transakcji");
             System.out.println("0. Koniec");
 
-            String userInput = scanner.nextLine();
+            userInput = scanner.nextLine();
 
             switch (userInput) {
                 case "1":
@@ -33,11 +34,11 @@ public class BudgetApp {
                     BudgetSearchType.main(new String[0]);
                     break;
                 case "0":
-                    return;
+                    break;
                 default:
                     System.out.println("Błędny wybór!");
             }
-            scanner.close();
         }
+        scanner.close();
     }
 }

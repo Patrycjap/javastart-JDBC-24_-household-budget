@@ -21,6 +21,5 @@ public class BudgetSearchType {
         List<Transaction> transaction = transactionDao.searchByType(type);
         System.out.println("Poniżej znajdują się transakcje dla typu: " + type);
         System.out.println(transaction);
-        scanner.close();
     }
 }
