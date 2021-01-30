@@ -7,6 +7,9 @@ import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class BudgetUpdate {
+
+    public static final DateTimeFormatter DATE_FORMATER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
@@ -29,14 +32,12 @@ public class BudgetUpdate {
         BigDecimal amount = scanner.nextBigDecimal();
         scanner.nextLine();
 
-        DateTimeFormatter dateFormater = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
         LocalDate formatedDate = null;
         while (formatedDate == null) {
             System.out.println("Podaj date w formacie yyyy-mm-dd");
             try {
                 String date = scanner.nextLine();
-                formatedDate = LocalDate.parse(date, dateFormater);
+                formatedDate = LocalDate.parse(date, DATE_FORMATER);
             } catch (DateTimeParseException e) {
                 System.out.println("Data nieprawidłowa");
             }

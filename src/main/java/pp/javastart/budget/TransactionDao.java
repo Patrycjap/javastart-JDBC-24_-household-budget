@@ -13,6 +13,8 @@ public class TransactionDao {
     public static final String SELECT_BY_TYPE_SQL = "SELECT * FROM transactions WHERE type like ?";
     public static final String DELETE_BY_ID_SQL = "DELETE FROM transactions WHERE id = ?";
     public static final String URL_DB = "jdbc:mysql://localhost:3306/budget?serverTimezone=UTC&characterEncoding=utf8";
+    public static final String PASSWORD = "root";
+    public static final String LOGIN = "root";
 
     public void insert(Transaction transaction) {
 
@@ -59,7 +61,7 @@ public class TransactionDao {
         }
         String url = URL_DB;
         try {
-            return DriverManager.getConnection(url, "root", "root");
+            return DriverManager.getConnection(url, LOGIN, PASSWORD);
         } catch (SQLException e) {
             System.out.println("Niepowodzenie przy połączeniu do bazy " + e.getMessage());
         }
