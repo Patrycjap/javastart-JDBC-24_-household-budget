@@ -112,16 +112,14 @@ public class TransactionDao {
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, type);
             ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
+            while (resultSet.next() == true) {
                 long id = resultSet.getLong("id");
                 TransactionType typeFromDb = TransactionType.valueOf(resultSet.getString("type"));
                 String description = resultSet.getString("description");
                 BigDecimal amount = resultSet.getBigDecimal("amount");
                 Date date = resultSet.getDate("date");
-
                 transaction = new Transaction(id, typeFromDb, description, amount, date.toLocalDate());
                 list.add(transaction);
-                return list;
             }
         } catch (SQLException e) {
             System.out.println("Niepowodzenie podczas wczytywania danych z bazy: " + e.getMessage());
